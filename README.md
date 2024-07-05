@@ -1,3 +1,4 @@
+## Study Notes
 This repository is dedicated to documenting my journey of learning and revisiting various programming languages and technologies. Here, I will keep track of important insights, learning milestones, and achievements. The primary goal is to create a comprehensive reference that will facilitate easy access to previously covered materials.
 
 ## Contents
