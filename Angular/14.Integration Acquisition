@@ -1,0 +1,53 @@
+Integration Acquisition
+```
+getSelfAssessmentReflection(weekNumber: number): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('week_number', weekNumber);
+    return this.http
+      .get(`${courseBaseUrl}/get-self-assessment/`, {
+        params: params,
+      })
+      .pipe(
+        map((response: any) => {
+          return response || null;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            return of(null);
+          } else {
+            return this.handleError(error);
+          }
+        })
+      );
+  }
+
+  getSelfReflectInfo(id: number): Observable<any> {
+    return this.http.get<any>(`${courseBaseUrl}/get-selfreflect-Info/${id}/`);
+  }
+
+  getJournalTotalInfo(id: number): Observable<any> {
+    return this.http.get<any>(`${courseBaseUrl}/get-journal-total-Info/${id}/`);
+  }
+
+  getDesiredTimeInfo(id: number): Observable<any> {
+    return this.http.get<any>(`${courseBaseUrl}/get-desired-time-Info/${id}/`);
+  }
+
+  getCourseDetailsData(id: number): Observable<any> {
+    return forkJoin({
+      patientCourseDetails: this.patientService.getPatientCourseDetailsById(id),
+      selfReflectInfo: this.getSelfReflectInfo(id),
+      sleepJournalTotal: this.getJournalTotalInfo(id),
+      desiredSleepTime: this.getDesiredTimeInfo(id),
+    }).pipe(
+      map((response) => {
+        return {
+          patientDetails: response.patientCourseDetails,
+          selfReflectData: response.selfReflectInfo,
+          sleepJournalData: response.sleepJournalTotal,
+          desiredSleepData: response.desiredSleepTime,
+        };
+      })
+    );
+  }
+```
